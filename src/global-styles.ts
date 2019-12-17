@@ -11,6 +11,7 @@ ${reset};
   }
   body{
     font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16;
   }
   a{
     color: unset;
