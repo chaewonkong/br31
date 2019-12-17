@@ -5,6 +5,9 @@ import { brApi } from "../../api"
 import { fontSize, media } from "../../styles/_mixin"
 
 
+
+const menuNameList = ["아이스 초코파이情", "마법사의 할로윈", "오레오 쿠키 앤 카라멜", "슈퍼 버스데이", "잘될거예엿", "엄마는 외계인", "쌀떡궁합", "쫀떡궁합", "바람과 함께 사라지다", "이상한 나라의 솜사탕", "아포가토", "쿠키 앤 크림", "초코나무 숲", "프랄린 앤 크림", "31요거트", "알폰소 망고", "피스타치오 아몬드", "아몬드 봉봉", "사랑에 빠진 딸기", "베리베리 스트로베리", "민트 초콜릿 칩", "슈팅스타", "레인보우 샤베트", "바닐라", "초콜릿", "초콜릿 칩", "뉴욕 치즈케이크", "그린티", "자모카 아몬드 훠지", "체리쥬빌레", "초콜릿 무스"]
+
 const Wrapper = styled.div`
   padding: 1rem;
   display: flex;
@@ -19,6 +22,7 @@ margin: 3rem;
 
 const RandomImage = styled.img`
 margin: 3rem;
+margin-bottom: 0;
 width: 500px;
   ${media.tablet} {
     width: 400px;
@@ -28,33 +32,87 @@ width: 500px;
   }
 `
 
+const MenuText = styled.p`
+margin-bottom: 3rem;
+ font-size: ${fontSize.largeFontSize}
+`
+
+interface IMenu {
+  idx: number;
+  name: string;
+  url: string;
+}
+
 const Main: React.FC = () => {
-  const getRandomOne = async () => await brApi.getRandomOne()
+  const [visible, toggleVisible] = useState(false);
+  const [menuList, setMenuList] = useState<IMenu[]>([])
+  const [target, setTarget] = useState(0)
+  const [interval, handleInterval] = useState()
+  const [intervalValue, setIntervalValue] = useState(false)
+
+  const getRandomOne = async () => {
+    const menuList = await brApi.getRandomOne()
+    setMenuList(menuList)
+  }
+
+  const changeImage = () => {
+
+    return `assets/${target}.png`
+
+  }
+
+  // const startInterval = () => {
+  //   let interval = setInterval(() => {
+  //     let idx = Math.floor(Math.random() * 31)
+  //     setTarget(idx)
+  //   }, 500)
+  //   handleInterval(interval)
+  // }
+
+  const toggleInterval = () => {
+    if (intervalValue) {
+      clearInterval(interval)
+      setIntervalValue(false)
+    } else {
+      let interval = setInterval(() => {
+        let idx = Math.floor(Math.random() * 31)
+        setTarget(idx)
+      }, 50)
+      handleInterval(interval)
+      setIntervalValue(true)
+    }
+  }
 
   useEffect(() => {
+    // startInterval()
+
     getRandomOne()
+    changeImage()
   }, [])
 
-  const [visible, toggleVisible] = useState(false);
+
 
   const showModal = () => {
+    // clearInterval(interval)
     toggleVisible(true)
   }
 
   const handleOk = () => {
-
+    // clearInterval(interval)
     toggleVisible(false)
   }
 
   const handleCancel = () => {
+    // startInterval()
     toggleVisible(false)
   }
 
   return (
     <Wrapper>
       <Title>타이틀</Title>
-      <RandomImage src="https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1106&q=80" />
-      <Button type="default" size="large" onClick={showModal}>골라 주세요!</Button>
+      <RandomImage src={changeImage()} />
+      {intervalValue ? null : <MenuText>{menuNameList[target]}</MenuText>}
+      <Button type="default" size="large" onClick={toggleInterval}>정지!</Button>
       <Modal
         title="선택완료!"
         visible={visible}

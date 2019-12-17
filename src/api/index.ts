@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 
+
 // interface 
 
-const URL = "https://l6dsq4pcp4.execute-api.ap-northeast-2.amazonaws.com/dev/jua"
+const URL = "https://l6dsq4pcp4.execute-api.ap-northeast-2.amazonaws.com"
 
 const api = axios.create({
     baseURL: URL,
@@ -15,7 +16,9 @@ const api = axios.create({
 
 export const brApi = {
     getRandomOne: async () => {
-        const res = await api.get("")
-        console.log(res)
+        const res = await api.get("/dev/jua")
+        const data = res.data.slice(0, 31)
+        console.log(data)
+        return data
     }
 }
