@@ -86,7 +86,7 @@ const Main: React.FC = () => {
   useEffect(() => {
     // startInterval()
 
-    getRandomOne()
+    // getRandomOne()
     changeImage()
   }, [])
 
@@ -112,7 +112,7 @@ const Main: React.FC = () => {
       <Title>타이틀</Title>
       <RandomImage src={changeImage()} />
       {intervalValue ? null : <MenuText>{menuNameList[target]}</MenuText>}
-      <Button type="default" size="large" onClick={toggleInterval}>정지!</Button>
+      <Button type={intervalValue ? "danger" : "default"} size="large" onClick={toggleInterval}>{intervalValue ? "정지!" : "시작!"}</Button>
       <Modal
         title="선택완료!"
         visible={visible}
