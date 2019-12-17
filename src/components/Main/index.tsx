@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Modal, Button } from 'antd'
+import { Modal, Button, Spin } from 'antd'
 import { brApi } from "../../api"
 import { fontSize, media } from "../../styles/_mixin"
 import axios from 'axios'
@@ -38,6 +38,13 @@ margin-bottom: 3rem;
  font-size: ${fontSize.largeFontSize}
 `
 
+const ModalInner = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
 interface IMenu {
   idx: number;
   name: string;
@@ -66,30 +73,33 @@ const Main: React.FC = () => {
 
   }
 
-  // const startInterval = () => {
-  //   let interval = setInterval(() => {
-  //     let idx = Math.floor(Math.random() * 31)
-  //     setTarget(idx)
-  //   }, 500)
-  //   handleInterval(interval)
-  // }
-
-  const toggleInterval = () => {
-    if (intervalValue) {
-      clearInterval(interval)
-      setIntervalValue(false)
-    } else {
-      let interval = setInterval(() => {
-        let idx = Math.floor(Math.random() * 31)
-        setTarget(idx)
-      }, 50)
-      handleInterval(interval)
-      setIntervalValue(true)
-    }
+  const startInterval = () => {
+    let interval = setInterval(() => {
+      let idx = Math.floor(Math.random() * 31)
+      setTarget(idx)
+    }, 2000)
+    handleInterval(interval)
   }
 
+  // const toggleInterval = () => {
+  //   if (intervalValue) {
+  //     clearInterval(interval)
+  //     setIntervalValue(false)
+  //   } else {
+  //     let interval = setInterval(() => {
+  //       let idx = Math.floor(Math.random() * 31)
+  //       setTarget(idx)
+  //     }, 50)
+  //     handleInterval(interval)
+  //     setIntervalValue(true)
+  //   }
+  // }
+
+  const [randVal, setRandVal] = useState(0)
+
+
   useEffect(() => {
-    // startInterval()
+    startInterval()
 
     getData()
     changeImage()
@@ -99,6 +109,8 @@ const Main: React.FC = () => {
 
   const showModal = () => {
     // clearInterval(interval)
+    let randVal = Math.floor(Math.random() * 31)
+    setRandVal(randVal)
     toggleVisible(true)
   }
 
@@ -112,12 +124,12 @@ const Main: React.FC = () => {
     toggleVisible(false)
   }
 
-  return (
+  if (menuList[target]) return (
     <Wrapper>
-      <Title>타이틀</Title>
+      <Title>베스킨 라빈스 31</Title>
       <RandomImage src={changeImage()} />
-      {intervalValue ? null : <MenuText>{menuNameList[target]}</MenuText>}
-      <Button type={intervalValue ? "danger" : "default"} size="large" onClick={toggleInterval}>{intervalValue ? "정지!" : "시작!"}</Button>
+      {/* {intervalValue ? null : <MenuText>{menuList[target].name}</MenuText>} */}
+      <Button type="default" size="large" onClick={showModal}>메뉴 랜덤 선택!</Button>
       <Modal
         title="선택완료!"
         visible={visible}
@@ -126,13 +138,20 @@ const Main: React.FC = () => {
         okText="확인"
         cancelText="취소"
       >
-        <p>엄마는 외계인</p>
-        <p>레인보우 샤베트</p>
-        <p>슈팅스타</p>
-        <p>뉴욕 치즈 케익</p>
+        <ModalInner>
+          <RandomImage src={menuList[randVal].url} width="100%"></RandomImage>
+          <MenuText>{menuList[randVal].name}</MenuText>
+        </ModalInner>
       </Modal>
-    </Wrapper>
+    </Wrapper >
   );
+  else return (
+    <Wrapper>
+      <Title>베스킨 라빈스 31</Title>
+      <Spin />
+    </Wrapper>
+
+  )
 }
 
 export default Main;
