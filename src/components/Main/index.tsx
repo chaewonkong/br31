@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Modal, Button } from 'antd'
 import { brApi } from "../../api"
 import { fontSize, media } from "../../styles/_mixin"
+import axios from 'axios'
 
 
 
@@ -50,14 +51,18 @@ const Main: React.FC = () => {
   const [interval, handleInterval] = useState()
   const [intervalValue, setIntervalValue] = useState(false)
 
-  const getRandomOne = async () => {
+  const getData = async () => {
     const menuList = await brApi.getRandomOne()
     setMenuList(menuList)
+
+    menuList.map(menu => axios.get(menu.url))
   }
 
   const changeImage = () => {
 
-    return `assets/${target}.png`
+    if (menuList[target])
+      return menuList[target].url
+    else return "https://images.unsplash.com/photo-1538489949601-cbabf5b0c105?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2734&q=80"
 
   }
 
@@ -86,7 +91,7 @@ const Main: React.FC = () => {
   useEffect(() => {
     // startInterval()
 
-    // getRandomOne()
+    getData()
     changeImage()
   }, [])
 
