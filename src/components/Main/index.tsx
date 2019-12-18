@@ -127,7 +127,7 @@ const Main: React.FC = () => {
   if (menuList[target]) return (
     <Wrapper>
       <Title>베스킨 라빈스 31</Title>
-      <RandomImage src={changeImage()} />
+      <RandomImage src="assets/rotate.png" />
       {/* {intervalValue ? null : <MenuText>{menuList[target].name}</MenuText>} */}
       <Button type="default" size="large" onClick={showModal}>메뉴 랜덤 선택!</Button>
       <Modal
@@ -139,7 +139,7 @@ const Main: React.FC = () => {
         cancelText="취소"
       >
         <ModalInner>
-          <RandomImage src={menuList[randVal].url} width="100%"></RandomImage>
+          <RandomImage src={menuList[randVal].url} style={{ width: "80%", marginTop: 0 }}></RandomImage>
           <MenuText>{menuList[randVal].name}</MenuText>
         </ModalInner>
       </Modal>
