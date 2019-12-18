@@ -4,6 +4,7 @@ import { Modal, Button, Spin } from 'antd'
 import { brApi } from "../../api"
 import { fontSize, media } from "../../styles/_mixin"
 import axios from 'axios'
+import { Spinner } from "../utils"
 
 
 
@@ -62,7 +63,7 @@ const Main: React.FC = () => {
     const menuList = await brApi.getRandomOne()
     setMenuList(menuList)
 
-    menuList.map(menu => axios.get(menu.url))
+    // menuList.map(menu => axios.get(menu.url))
   }
 
   const changeImage = () => {
@@ -107,9 +108,10 @@ const Main: React.FC = () => {
 
 
 
-  const showModal = () => {
+  const showModal = async () => {
     // clearInterval(interval)
     let randVal = Math.floor(Math.random() * 31)
+    await axios.get(`assets/${randVal}.png`)
     setRandVal(randVal)
     toggleVisible(true)
   }
@@ -148,7 +150,7 @@ const Main: React.FC = () => {
   else return (
     <Wrapper>
       <Title>베스킨 라빈스 31</Title>
-      <Spin />
+      <Spinner />
     </Wrapper>
 
   )
