@@ -101,29 +101,34 @@ const Main: React.FC = () => {
 
   useEffect(() => {
     startInterval()
+    getImage()
 
     getData()
-    changeImage()
   }, [])
 
+  const getImage = async () => {
+    let randTmp = Math.floor(Math.random() * 31)
+    setRandVal(randTmp)
+    await axios.get(`assets/${randVal}.png`)
+  }
 
 
   const showModal = async () => {
     // clearInterval(interval)
-    let randVal = Math.floor(Math.random() * 31)
-    await axios.get(`assets/${randVal}.png`)
-    setRandVal(randVal)
+    // let randVal = Math.floor(Math.random() * 31)
     toggleVisible(true)
   }
 
   const handleOk = () => {
     // clearInterval(interval)
     toggleVisible(false)
+    setTimeout(() => getImage(), 100)
   }
 
   const handleCancel = () => {
     // startInterval()
     toggleVisible(false)
+    setTimeout(() => getImage(), 100)
   }
 
   if (menuList[target]) return (
